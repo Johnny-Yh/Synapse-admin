@@ -78,47 +78,11 @@ const LoginPage = ({ theme }) => {
   const login = useLogin();
   const notify = useNotify();
   const [loading, setLoading] = useState(false);
-  const [supportPassAuth, setSupportPassAuth] = useState(true);
-  const [ssoBaseUrl, setSSOBaseUrl] = useState("");
+  const [supportPassAuth] = useState(true);
   let locale = useLocale();
   const setLocale = useSetLocale();
   const translate = useTranslate();
   const base_url = localStorage.getItem("base_url");
-  const tokenReg = /\?loginToken=([a-zA-Z0-9_-]+)(?:#\/)?/;
-  const retToken = tokenReg.exec(window.location.href);
-  const ssoToken = localStorage.getItem("sso_ret_token");
-
-  if (retToken) {
-    console.log("SSO token is", retToken[1]);
-    localStorage.setItem("sso_ret_token", retToken[1]);
-    console.log("SSO token saved. Reloading the page to prevent loging again.");
-    window.location.href = window.location.href.replace(retToken[0], "#"); // prevent further requests
-  } else if (ssoToken) {
-    const baseUrl = localStorage.getItem("sso_base_url");
-    localStorage.removeItem("sso_base_url");
-    localStorage.removeItem("sso_ret_token");
-    if (baseUrl) {
-      const auth = {
-        base_url: baseUrl,
-        username: null,
-        password: null,
-        loginToken: ssoToken,
-      };
-      console.log("Base URL is:", baseUrl);
-      console.log("SSO Token is:", ssoToken);
-      console.log("Let's try token login...");
-      login(auth).catch(error => {
-        alert(
-          typeof error === "string"
-            ? error
-            : typeof error === "undefined" || !error.message
-            ? "ra.auth.sign_in_error"
-            : error.message
-        );
-        console.error(error);
-      });
-    }
-  }
 
   const renderInput = ({
     meta: { touched, error } = {},
@@ -171,14 +135,6 @@ const LoginPage = ({ theme }) => {
     });
   };
 
-  const handleSSO = () => {
-    localStorage.setItem("sso_base_url", ssoBaseUrl);
-    const ssoFullUrl = `${ssoBaseUrl}/_matrix/client/r0/login/sso/redirect?redirectUrl=${encodeURIComponent(
-      window.location.href
-    )}`;
-    window.location.href = ssoFullUrl;
-  };
-
   const extractHomeServer = username => {
     const usernameRegex = /@[a-zA-Z0-9._=\-/]+:([a-zA-Z0-9\-.]+\.[a-zA-Z]+)/;
     if (!username) return null;
@@ -229,31 +185,6 @@ const LoginPage = ({ theme }) => {
           })
           .catch(_ => {
             setServerVersion("");
-          });
-
-        // setSSOUrl
-        const authMethodUrl = `${formData.base_url}/_matrix/client/r0/login`;
-        let supportPass = false,
-          supportSSO = false;
-        fetchUtils
-          .fetchJson(authMethodUrl, { method: "GET" })
-          .then(({ json }) => {
-            json.flows.forEach(f => {
-              if (f.type === "m.login.password") {
-                supportPass = true;
-              } else if (f.type === "m.login.sso") {
-                supportSSO = true;
-              }
-            });
-            setSupportPassAuth(supportPass);
-            if (supportSSO) {
-              setSSOBaseUrl(formData.base_url);
-            } else {
-              setSSOBaseUrl("");
-            }
-          })
-          .catch(_ => {
-            setSSOBaseUrl("");
           });
       },
       [formData.base_url]
@@ -342,17 +273,6 @@ const LoginPage = ({ theme }) => {
                 >
                   {loading && <CircularProgress size={25} thickness={2} />}
                   {translate("ra.auth.sign_in")}
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleSSO}
-                  disabled={loading || ssoBaseUrl === ""}
-                  className={classes.button}
-                  fullWidth
-                >
-                  {loading && <CircularProgress size={25} thickness={2} />}
-                  {translate("synapseadmin.auth.sso_sign_in")}
                 </Button>
               </CardActions>
             </Card>

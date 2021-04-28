@@ -17,7 +17,6 @@ import { Route } from "react-router-dom";
 import englishMessages from "./i18n/en";
 import chineseMessages from "./i18n/zh";
 
-// TODO: Can we use lazy loading together with browser locale?
 const messages = {
   en: englishMessages,
   zh: chineseMessages,

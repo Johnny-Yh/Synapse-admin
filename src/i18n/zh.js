@@ -10,7 +10,6 @@ export default {
       username_error: "请输入完整有效的用户 ID: '@user:domain'",
       protocol_error: "URL 需要以'http://'或'https://'作为起始",
       url_error: "不是一个有效的 Matrix 服务器地址",
-      sso_sign_in: "使用 SSO 登录",
     },
     users: {
       invalid_user_id:
@@ -144,7 +143,7 @@ export default {
         version: "版本",
         is_encrypted: "已经加密",
         encryption: "加密",
-        federatable: "可联合的",
+        federatable: "可联合",
         public: "公开",
         creator: "创建者",
         join_rules: "加入规则",
@@ -264,7 +263,7 @@ export default {
       },
     },
     user_media_statistics: {
-      name: "用户的媒体文件",
+      name: "媒体文件",
       fields: {
         media_count: "媒体文件统计",
         media_length: "媒体文件长度",

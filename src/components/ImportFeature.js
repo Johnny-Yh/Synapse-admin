@@ -79,8 +79,7 @@ const FilePicker = props => {
     setStats(null);
     setImportResults(null);
     const file = e.target.files ? e.target.files[0] : null;
-    /* Let's refuse some unreasonably big files instead of freezing
-     * up the browser */
+    /* 当文件过大时，拒绝请求 */
     if (file.size > 100000000) {
       const message = translate("import_users.errors.unreasonably_big", {
         size: (file.size / (1024 * 1024)).toFixed(2),

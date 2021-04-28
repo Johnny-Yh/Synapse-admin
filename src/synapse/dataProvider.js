@@ -1,7 +1,7 @@
 import { fetchUtils } from "react-admin";
 import { stringify } from "query-string";
 
-// Adds the access token to all requests
+// 为所有请求添加登陆时的 access tokens
 const jsonClient = (url, options = {}) => {
   const token = localStorage.getItem("access_token");
   console.log("httpClient " + url);

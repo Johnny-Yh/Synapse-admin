@@ -1,13 +1,10 @@
 import { fetchUtils } from "react-admin";
 
 const authProvider = {
-  // called when the user attempts to log in
-  login: ({ base_url, username, password, loginToken }) => {
+  // 当用户点击登录时调用
+  login: ({ base_url, username, password }) => {
     console.log("login to ", base_url);
-    console.log("login token ", loginToken);
-    let options;
-    if (username && password) {
-      options = {
+    const options = {
         method: "POST",
         body: JSON.stringify({
           type: "m.login.password",
@@ -16,23 +13,10 @@ const authProvider = {
           initial_device_display_name: "Synapse Admin",
         }),
       };
-    } else if (loginToken) {
-      options = {
-        method: "POST",
-        body: JSON.stringify({
-          type: "m.login.token",
-          token: loginToken,
-          initial_device_display_name: "Synapse Admin",
-        }),
-      };
-    } else {
-      // Invalid request
-      return Promise.resolve();
-    }
+  
+    // 使用base_url进行登录 而不是用well_known入口进行登录
+    // 因为管理员需要通过私有地址访问 admin API
 
-    // use the base_url from login instead of the well_known entry from the
-    // server, since the admin might want to access the admin API via some
-    // private address
     localStorage.setItem("base_url", base_url);
 
     const decoded_base_url = window.decodeURIComponent(base_url);
@@ -45,7 +29,7 @@ const authProvider = {
       localStorage.setItem("device_id", json.device_id);
     });
   },
-  // called when the user clicks on the logout button
+  // 当用户点击退出时调用
   logout: () => {
     console.log("logout");
 
@@ -69,7 +53,7 @@ const authProvider = {
     }
     return Promise.resolve();
   },
-  // called when the API returns an error
+  // 当API返回错误时调用
   checkError: ({ status }) => {
     console.log("checkError " + status);
     if (status === 401 || status === 403) {
@@ -77,7 +61,7 @@ const authProvider = {
     }
     return Promise.resolve();
   },
-  // called when the user navigates to a new location, to check for authentication
+  // 当用户点击其他页面，需要验证时调用
   checkAuth: () => {
     const access_token = localStorage.getItem("access_token");
     console.log("checkAuth " + access_token);
@@ -85,7 +69,7 @@ const authProvider = {
       ? Promise.resolve()
       : Promise.reject();
   },
-  // called when the user navigates to a new location, to check for permissions / roles
+  // 当用户点击其他页面，检查权限时调用
   getPermissions: () => Promise.resolve(),
 };
 

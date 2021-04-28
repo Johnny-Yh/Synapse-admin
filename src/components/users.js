@@ -110,7 +110,7 @@ const UserListActions = ({
         onClick={() => {
           redirectTo(redirect);
         }}
-        label="CSV Import"
+        label="导入 CSV文件"
       >
         <GetAppIcon style={{ transform: "rotate(180deg)", fontSize: "20" }} />
       </Button>

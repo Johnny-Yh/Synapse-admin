@@ -38,10 +38,6 @@ Steps for 2):
 - run the Docker container: `docker run -p 8080:80 awesometechnologies/synapse-admin`
 - browse to http://localhost:8080
 
-## Screenshots
-
-![Screenshots](./screenshots.jpg)
-
 ## Development
 
 - Use `yarn test` to run all style, lint and unit tests

@@ -18,7 +18,7 @@ const useStyles = makeStyles(
       color: theme.palette.error.main,
       "&:hover": {
         backgroundColor: fade(theme.palette.error.main, 0.12),
-        // Reset on mouse devices
+        // 在鼠标设备上重置
         "@media (hover: none)": {
           backgroundColor: "transparent",
         },

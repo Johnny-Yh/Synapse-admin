@@ -11,23 +11,20 @@ const authProvider = {
           user: username,
           password: password,
           initial_device_display_name: "Synapse Admin",
-        }),
+        }),//封装成JSON对象
       };
   
-    // 使用base_url进行登录 而不是用well_known入口进行登录
-    // 因为管理员需要通过私有地址访问 admin API
-
     localStorage.setItem("base_url", base_url);
 
     const decoded_base_url = window.decodeURIComponent(base_url);
-    const login_api_url = decoded_base_url + "/_matrix/client/r0/login";
+    const login_api_url = decoded_base_url + "/_matrix/client/r0/login";//拼接API地址
 
     return fetchUtils.fetchJson(login_api_url, options).then(({ json }) => {
       localStorage.setItem("home_server", json.home_server);
       localStorage.setItem("user_id", json.user_id);
       localStorage.setItem("access_token", json.access_token);
       localStorage.setItem("device_id", json.device_id);
-    });
+    });//发送请求并存储在LocalStorage
   },
   // 当用户点击退出时调用
   logout: () => {

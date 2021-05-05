@@ -35,7 +35,7 @@ const resourceMap = {
       is_guest: !!u.is_guest,
       admin: !!u.admin,
       deactivated: !!u.deactivated,
-      // need timestamp in milliseconds
+      // 时间戳使用毫秒
       creation_ts_ms: u.creation_ts * 1000,
     }),
     data: "users",
